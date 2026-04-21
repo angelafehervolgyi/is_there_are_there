@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESL Exercise: Is There / Are There Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #764ba2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #f093fb;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .instructions {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ff6b6b;
+        }
+
+        .instructions h3 {
+            color: #d32f2f;
+            margin-bottom: 10px;
+        }
+
+        .instructions p {
+            color: #424242;
+            line-height: 1.6;
+        }
+
+        .question {
+            background: #f5f5f5;
+            border-left: 5px solid #667eea;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .question:hover {
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 35px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+
+        .blank {
+            background: #fff59d;
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+            color: #f57f17;
+            display: inline-block;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .answer-btn {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .answer-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .answer-btn.selected {
+            border-color: #667eea;
+            background: #e8eaf6;
+        }
+
+        .answer-btn.correct {
+            background: #c8e6c9;
+            border-color: #4caf50;
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .answer-btn.incorrect {
+            background: #ffcdd2;
+            border-color: #f44336;
+            color: #c62828;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 1em;
+            display: none;
+        }
+
+        .feedback.correct {
+            color: #2e7d32;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            color: #c62828;
+            display: block;
+        }
+
+        .feedback::before {
+            content: '✓ ';
+        }
+
+        .feedback.incorrect::before {
+            content: '✗ ';
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(240, 147, 251, 0.6);
+        }
+
+        .score-display {
+            text-align: center;
+            margin-top: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            color: white;
+            display: none;
+        }
+
+        .score-display.show {
+            display: block;
+            animation: scoreAppear 0.5s ease;
+        }
+
+        @keyframes scoreAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .score-display h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .score-display .score-number {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .score-display .score-percentage {
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+
+        .score-message {
+            font-size: 1.2em;
+            font-style: italic;
+        }
+
+        .emoji {
+            font-size: 3em;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .answers {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>❓ Is There / Are There? ❓</h1>
+            <p class="subtitle">Practice Question Formation</p>
+        </header>
+
+        <div class="instructions">
+            <h3>📝 Instructions:</h3>
+            <p>Choose the correct question form. You will earn 1 point for each correct answer. Click "Submit" when you're ready to see your final score!</p>
+        </div>
+
+        <form id="quizForm">
+            <!-- Question 1 -->
+            <div class="question">
+                <span class="question-number">1</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">kitchen</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="1" data-answer="Are there a kitchen?" data-correct="false">Are there a kitchen?</button>
+                    <button type="button" class="answer-btn" data-question="1" data-answer="Is there a kitchen?" data-correct="true">Is there a kitchen?</button>
+                    <button type="button" class="answer-btn" data-question="1" data-answer="There is a kitchen?" data-correct="false">There is a kitchen?</button>
+                    <button type="button" class="answer-btn" data-question="1" data-answer="There are a kitchen?" data-correct="false">There are a kitchen?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <span class="question-number">2</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">three bedrooms</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="2" data-answer="Is there three bedrooms?" data-correct="false">Is there three bedrooms?</button>
+                    <button type="button" class="answer-btn" data-question="2" data-answer="There are three bedrooms?" data-correct="false">There are three bedrooms?</button>
+                    <button type="button" class="answer-btn" data-question="2" data-answer="Are there three bedrooms?" data-correct="true">Are there three bedrooms?</button>
+                    <button type="button" class="answer-btn" data-question="2" data-answer="Is there three bedroom?" data-correct="false">Is there three bedroom?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <span class="question-number">3</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">big sofa</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="3" data-answer="Are there a big sofa?" data-correct="false">Are there a big sofa?</button>
+                    <button type="button" class="answer-btn" data-question="3" data-answer="There is a big sofa?" data-correct="false">There is a big sofa?</button>
+                    <button type="button" class="answer-btn" data-question="3" data-answer="Is there a big sofa?" data-correct="true">Is there a big sofa?</button>
+                    <button type="button" class="answer-btn" data-question="3" data-answer="Are there big sofas?" data-correct="false">Are there big sofas?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <span class="question-number">4</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">two bathrooms</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="4" data-answer="Is there two bathrooms?" data-correct="false">Is there two bathrooms?</button>
+                    <button type="button" class="answer-btn" data-question="4" data-answer="There are two bathrooms?" data-correct="false">There are two bathrooms?</button>
+                    <button type="button" class="answer-btn" data-question="4" data-answer="Are there two bathroom?" data-correct="false">Are there two bathroom?</button>
+                    <button type="button" class="answer-btn" data-question="4" data-answer="Are there two bathrooms?" data-correct="true">Are there two bathrooms?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <span class="question-number">5</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">comfortable bed</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="5" data-answer="Are there a comfortable bed?" data-correct="false">Are there a comfortable bed?</button>
+                    <button type="button" class="answer-btn" data-question="5" data-answer="Is there a comfortable bed?" data-correct="true">Is there a comfortable bed?</button>
+                    <button type="button" class="answer-btn" data-question="5" data-answer="There is a comfortable bed?" data-correct="false">There is a comfortable bed?</button>
+                    <button type="button" class="answer-btn" data-question="5" data-answer="Are there comfortable bed?" data-correct="false">Are there comfortable bed?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <span class="question-number">6</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">many chairs</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="6" data-answer="Is there many chairs?" data-correct="false">Is there many chairs?</button>
+                    <button type="button" class="answer-btn" data-question="6" data-answer="There are many chairs?" data-correct="false">There are many chairs?</button>
+                    <button type="button" class="answer-btn" data-question="6" data-answer="Are there many chairs?" data-correct="true">Are there many chairs?</button>
+                    <button type="button" class="answer-btn" data-question="6" data-answer="Is there many chair?" data-correct="false">Is there many chair?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question">
+                <span class="question-number">7</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">television</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="7" data-answer="Are there a television?" data-correct="false">Are there a television?</button>
+                    <button type="button" class="answer-btn" data-question="7" data-answer="There is a television?" data-correct="false">There is a television?</button>
+                    <button type="button" class="answer-btn" data-question="7" data-answer="Is there a television?" data-correct="true">Is there a television?</button>
+                    <button type="button" class="answer-btn" data-question="7" data-answer="Are there television?" data-correct="false">Are there television?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question">
+                <span class="question-number">8</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">four windows</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="8" data-answer="Is there four windows?" data-correct="false">Is there four windows?</button>
+                    <button type="button" class="answer-btn" data-question="8" data-answer="There are four windows?" data-correct="false">There are four windows?</button>
+                    <button type="button" class="answer-btn" data-question="8" data-answer="Are there four windows?" data-correct="true">Are there four windows?</button>
+                    <button type="button" class="answer-btn" data-question="8" data-answer="Is there four window?" data-correct="false">Is there four window?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question">
+                <span class="question-number">9</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">bookshelf</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="9" data-answer="Are there a bookshelf?" data-correct="false">Are there a bookshelf?</button>
+                    <button type="button" class="answer-btn" data-question="9" data-answer="Is there a bookshelf?" data-correct="true">Is there a bookshelf?</button>
+                    <button type="button" class="answer-btn" data-question="9" data-answer="There is a bookshelf?" data-correct="false">There is a bookshelf?</button>
+                    <button type="button" class="answer-btn" data-question="9" data-answer="Are there bookshelf?" data-correct="false">Are there bookshelf?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question">
+                <span class="question-number">10</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">five pictures</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="10" data-answer="Is there five pictures?" data-correct="false">Is there five pictures?</button>
+                    <button type="button" class="answer-btn" data-question="10" data-answer="There are five pictures?" data-correct="false">There are five pictures?</button>
+                    <button type="button" class="answer-btn" data-question="10" data-answer="Are there five pictures?" data-correct="true">Are there five pictures?</button>
+                    <button type="button" class="answer-btn" data-question="10" data-answer="Is there five picture?" data-correct="false">Is there five picture?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 11 -->
+            <div class="question">
+                <span class="question-number">11</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">desk</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="11" data-answer="Are there a desk?" data-correct="false">Are there a desk?</button>
+                    <button type="button" class="answer-btn" data-question="11" data-answer="Is there a desk?" data-correct="true">Is there a desk?</button>
+                    <button type="button" class="answer-btn" data-question="11" data-answer="There is a desk?" data-correct="false">There is a desk?</button>
+                    <button type="button" class="answer-btn" data-question="11" data-answer="Are there desk?" data-correct="false">Are there desk?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 12 -->
+            <div class="question">
+                <span class="question-number">12</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">carpets</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="12" data-answer="Is there carpets?" data-correct="false">Is there carpets?</button>
+                    <button type="button" class="answer-btn" data-question="12" data-answer="There are carpets?" data-correct="false">There are carpets?</button>
+                    <button type="button" class="answer-btn" data-question="12" data-answer="Are there carpets?" data-correct="true">Are there carpets?</button>
+                    <button type="button" class="answer-btn" data-question="12" data-answer="Is there carpet?" data-correct="false">Is there carpet?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 13 -->
+            <div class="question">
+                <span class="question-number">13</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">microwave</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="13" data-answer="Are there a microwave?" data-correct="false">Are there a microwave?</button>
+                    <button type="button" class="answer-btn" data-question="13" data-answer="Is there a microwave?" data-correct="true">Is there a microwave?</button>
+                    <button type="button" class="answer-btn" data-question="13" data-answer="There is a microwave?" data-correct="false">There is a microwave?</button>
+                    <button type="button" class="answer-btn" data-question="13" data-answer="Are there microwave?" data-correct="false">Are there microwave?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 14 -->
+            <div class="question">
+                <span class="question-number">14</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">some cabinets</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="14" data-answer="Is there some cabinets?" data-correct="false">Is there some cabinets?</button>
+                    <button type="button" class="answer-btn" data-question="14" data-answer="There are some cabinets?" data-correct="false">There are some cabinets?</button>
+                    <button type="button" class="answer-btn" data-question="14" data-answer="Are there some cabinets?" data-correct="true">Are there some cabinets?</button>
+                    <button type="button" class="answer-btn" data-question="14" data-answer="Is there some cabinet?" data-correct="false">Is there some cabinet?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 15 -->
+            <div class="question">
+                <span class="question-number">15</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">closet</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="15" data-answer="Are there a closet?" data-correct="false">Are there a closet?</button>
+                    <button type="button" class="answer-btn" data-question="15" data-answer="Is there a closet?" data-correct="true">Is there a closet?</button>
+                    <button type="button" class="answer-btn" data-question="15" data-answer="There is a closet?" data-correct="false">There is a closet?</button>
+                    <button type="button" class="answer-btn" data-question="15" data-answer="Are there closet?" data-correct="false">Are there closet?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 16 -->
+            <div class="question">
+                <span class="question-number">16</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">lamps</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="16" data-answer="Is there lamps?" data-correct="false">Is there lamps?</button>
+                    <button type="button" class="answer-btn" data-question="16" data-answer="There are lamps?" data-correct="false">There are lamps?</button>
+                    <button type="button" class="answer-btn" data-question="16" data-answer="Are there lamps?" data-correct="true">Are there lamps?</button>
+                    <button type="button" class="answer-btn" data-question="16" data-answer="Is there lamp?" data-correct="false">Is there lamp?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 17 -->
+            <div class="question">
+                <span class="question-number">17</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">mirror</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="17" data-answer="Are there a mirror?" data-correct="false">Are there a mirror?</button>
+                    <button type="button" class="answer-btn" data-question="17" data-answer="Is there a mirror?" data-correct="true">Is there a mirror?</button>
+                    <button type="button" class="answer-btn" data-question="17" data-answer="There is a mirror?" data-correct="false">There is a mirror?</button>
+                    <button type="button" class="answer-btn" data-question="17" data-answer="Are there mirror?" data-correct="false">Are there mirror?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 18 -->
+            <div class="question">
+                <span class="question-number">18</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">stairs</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="18" data-answer="Is there stairs?" data-correct="false">Is there stairs?</button>
+                    <button type="button" class="answer-btn" data-question="18" data-answer="There are stairs?" data-correct="false">There are stairs?</button>
+                    <button type="button" class="answer-btn" data-question="18" data-answer="Are there stairs?" data-correct="true">Are there stairs?</button>
+                    <button type="button" class="answer-btn" data-question="18" data-answer="Is there stair?" data-correct="false">Is there stair?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 19 -->
+            <div class="question">
+                <span class="question-number">19</span>
+                <div class="question-text">
+                    How do you ask about a <span class="blank">garden</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="19" data-answer="Are there a garden?" data-correct="false">Are there a garden?</button>
+                    <button type="button" class="answer-btn" data-question="19" data-answer="Is there a garden?" data-correct="true">Is there a garden?</button>
+                    <button type="button" class="answer-btn" data-question="19" data-answer="There is a garden?" data-correct="false">There is a garden?</button>
+                    <button type="button" class="answer-btn" data-question="19" data-answer="Are there garden?" data-correct="false">Are there garden?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <!-- Question 20 -->
+            <div class="question">
+                <span class="question-number">20</span>
+                <div class="question-text">
+                    How do you ask about <span class="blank">curtains</span>?
+                </div>
+                <div class="answers">
+                    <button type="button" class="answer-btn" data-question="20" data-answer="Is there curtains?" data-correct="false">Is there curtains?</button>
+                    <button type="button" class="answer-btn" data-question="20" data-answer="There are curtains?" data-correct="false">There are curtains?</button>
+                    <button type="button" class="answer-btn" data-question="20" data-answer="Are there curtains?" data-correct="true">Are there curtains?</button>
+                    <button type="button" class="answer-btn" data-question="20" data-answer="Is there curtain?" data-correct="false">Is there curtain?</button>
+                </div>
+                <div class="feedback"></div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="submit-btn" id="submitBtn">✓ Submit Answers</button>
+                <button type="button" class="reset-btn" id="resetBtn">↻ Reset</button>
+            </div>
+        </form>
+
+        <div class="score-display" id="scoreDisplay">
+            <h2>Great Job! 🎉</h2>
+            <div class="emoji" id="scoreEmoji">🌟</div>
+            <div class="score-number"><span id="finalScore">0</span>/20</div>
+            <div class="score-percentage">(<span id="scorePercentage">0</span>%)</div>
+            <div class="score-message" id="scoreMessage">Keep practicing!</div>
+        </div>
+    </div>
+
+    <script>
+        const answerBtns = document.querySelectorAll('.answer-btn');
+        const submitBtn = document.getElementById('submitBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const finalScoreSpan = document.getElementById('finalScore');
+        const scorePercentageSpan = document.getElementById('scorePercentage');
+        const scoreMessageSpan = document.getElementById('scoreMessage');
+        const scoreEmojiSpan = document.getElementById('scoreEmoji');
+
+        const selectedAnswers = {};
+
+        // Handle answer button clicks
+        answerBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const questionNum = btn.dataset.question;
+                const question = btn.closest('.question');
+                const buttons = question.querySelectorAll('.answer-btn');
+                
+                // Remove selected class from all buttons in this question
+                buttons.forEach(b => {
+                    b.classList.remove('selected');
+                    b.classList.remove('correct');
+                    b.classList.remove('incorrect');
+                });
+                
+                // Add selected class to clicked button
+                btn.classList.add('selected');
+                
+                // Store the selected answer
+                selectedAnswers[questionNum] = {
+                    answer: btn.dataset.answer,
+                    isCorrect: btn.dataset.correct === 'true'
+                };
+            });
+        });
+
+        // Submit button
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            calculateScore();
+            displayScore();
+        });
+
+        // Reset button
+        resetBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetQuiz();
+        });
+
+        function calculateScore() {
+            let score = 0;
+            const questions = document.querySelectorAll('.question');
+            
+            questions.forEach((question, index) => {
+                const questionNum = index + 1;
+                const buttons = question.querySelectorAll('.answer-btn');
+                const feedback = question.querySelector('.feedback');
+                let answered = false;
+
+                buttons.forEach(btn => {
+                    if (btn.classList.contains('selected')) {
+                        answered = true;
+                        if (btn.dataset.correct === 'true') {
+                            btn.classList.add('correct');
+                            feedback.classList.remove('incorrect');
+                            feedback.classList.add('correct');
+                            feedback.textContent = 'Correct!';
+                            score++;
+                        } else {
+                            btn.classList.add('incorrect');
+                            feedback.classList.remove('correct');
+                            feedback.classList.add('incorrect');
+                            feedback.textContent = 'Incorrect!';
+                            
+                            // Highlight correct answer
+                            buttons.forEach(b => {
+                                if (b.dataset.correct === 'true') {
+                                    b.classList.add('correct');
+                                }
+                            });
+                        }
+                    }
+                });
+
+                if (!answered) {
+                    feedback.classList.remove('correct');
+                    feedback.classList.add('incorrect');
+                    feedback.textContent = 'Not answered!';
+                }
+            });
+
+            return score;
+        }
+
+        function displayScore() {
+            const score = calculateScore();
+            const percentage = Math.round((score / 20) * 100);
+            
+            finalScoreSpan.textContent = score;
+            scorePercentageSpan.textContent = percentage;
+            
+            // Set message and emoji based on score
+            if (score === 20) {
+                scoreMessageSpan.textContent = 'Perfect! You are a star! ⭐';
+                scoreEmojiSpan.textContent = '🏆';
+            } else if (score >= 18) {
+                scoreMessageSpan.textContent = 'Excellent! Almost perfect! 🌟';
+                scoreEmojiSpan.textContent = '⭐';
+            } else if (score >= 15) {
+                scoreMessageSpan.textContent = 'Great! You did very well! 👏';
+                scoreEmojiSpan.textContent = '😊';
+            } else if (score >= 12) {
+                scoreMessageSpan.textContent = 'Good! You\'re on the right track! 💪';
+                scoreEmojiSpan.textContent = '😌';
+            } else if (score >= 10) {
+                scoreMessageSpan.textContent = 'Not bad! Keep practicing! 📚';
+                scoreEmojiSpan.textContent = '📖';
+            } else {
+                scoreMessageSpan.textContent = 'Keep trying! Practice makes perfect! 💪';
+                scoreEmojiSpan.textContent = '🎯';
+            }
+            
+            scoreDisplay.classList.add('show');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetQuiz() {
+            // Clear selected answers
+            Object.keys(selectedAnswers).forEach(key => {
+                delete selectedAnswers[key];
+            });
+            
+            // Remove all selected, correct, and incorrect classes
+            answerBtns.forEach(btn => {
+                btn.classList.remove('selected');
+                btn.classList.remove('correct');
+                btn.classList.remove('incorrect');
+            });
+            
+            // Clear feedback messages
+            const feedbacks = document.querySelectorAll('.feedback');
+            feedbacks.forEach(fb => {
+                fb.classList.remove('correct');
+                fb.classList.remove('incorrect');
+                fb.textContent = '';
+            });
+            
+            // Hide score display
+            scoreDisplay.classList.remove('show');
+        }
+    </script>
+</body>
+</html>
